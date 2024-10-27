@@ -14,9 +14,9 @@ jobs:
         id: issue  
         uses: octokit/request-action@main
         with:  
-          route: GET /repos/:repository/issues/3
+          route: GET /repos/:repository/issues/:issue_number
           repository: ${{ github.repository }}  
-          issue_id: ${{ github.event.number }}
+          issue_id: ${{ github.event.id }}
         env:  
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
   
@@ -38,7 +38,7 @@ jobs:
         with:  
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}  
-          number: ${{ github.event.number }}
+          number: ${{ github.event.id }}
           message: |  
             Response from external service:  
             ```  
