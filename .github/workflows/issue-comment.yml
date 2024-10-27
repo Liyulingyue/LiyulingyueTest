@@ -16,7 +16,7 @@ jobs:
         with:  
           route: GET /repos/:repository/issues/:issue_number
           repository: ${{ github.repository }}  
-          issue_id: ${{ github.event.number }}
+          issue_id: 1 # ${{ github.event.number }}
         env:  
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
   
@@ -38,7 +38,7 @@ jobs:
         with:  
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}  
-          number: ${{ github.event.number }}
+          number: 1 # ${{ github.event.number }}
           message: |  
             Response from external service:  
             ```  
