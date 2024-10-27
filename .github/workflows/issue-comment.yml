@@ -31,13 +31,14 @@ jobs:
           data: '{"title": "${{ github.event.issue.title }}", "body": "${{ github.event.issue.body }}"}'
           timeout: 180000 # 设置超时时间为180秒（3分钟）  
   
-      # 如果请求成功，将外部服务的响应作为评论添加到issue上  
       - name: Comment on issue with response  
         if: steps.send_request.outputs.status == 200  
-        uses: peter-evans/commit-comment@v3
+        uses: hasura/comment-progress@v2.3.0
         with:  
-          issue-number: 1
-          body: |  
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}  
+          number: 1
+          message: |  
             Response from external service:  
             ```  
             ${{ steps.send_request.outputs.response }}  
