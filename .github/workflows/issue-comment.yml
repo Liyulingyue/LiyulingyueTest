@@ -34,7 +34,7 @@ jobs:
       # 如果请求成功，将外部服务的响应作为评论添加到issue上  
       - name: Comment on issue with response  
         if: steps.send_request.outputs.status == 200  
-        uses: peter-evans/create-or-update-comment@main
+        uses: peter-evans/create-or-update-comment@v4
         with:  
           issue-number: 1
           body: |  
@@ -48,7 +48,7 @@ jobs:
       # 如果请求失败（例如超时或网络错误），可以选择添加一个错误评论  
       - name: Comment on issue with error  
         if: steps.send_request.outputs.status != 200  
-        uses: peter-evans/create-or-update-comment@main
+        uses: peter-evans/create-or-update-comment@v4
         with:  
           issue-number: 1
           body: |  
