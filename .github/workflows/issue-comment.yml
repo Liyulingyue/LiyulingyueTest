@@ -25,7 +25,7 @@ jobs:
         id: send_request  
         uses: fjogeleit/http-request-action@v1
         with:  
-          url: 'http://47.120.64.144:8080/github-issue/' # 替换为你的实际URL  
+          url: 'http://47.120.64.144:8080/github-issue' # 替换为你的实际URL  
           method: 'POST'  
           customHeaders: '{"Content-Type": "application/json"}'
           data: '{"title": "${{ github.event.issue.title }}", "body": "${{ github.event.issue.body }}"}'
