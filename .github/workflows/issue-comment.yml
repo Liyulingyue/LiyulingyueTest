@@ -8,15 +8,11 @@ on:
 jobs:  
   send-issue-content:  
     runs-on: ubuntu-latest  
-    steps:  
-      # 检出仓库代码（虽然在这个例子中我们实际上不需要它）  
-      - name: Checkout repository  
-        uses: actions/checkout@v2  
-  
+    steps:
       # 获取新创建的issue的详细信息  
       - name: Get issue details  
         id: issue  
-        uses: octokit/request-action@v0.6.0  
+        uses: octokit/request-action
         with:  
           route: GET /repos/:repository/issues/:issue_id  
           repository: ${{ github.repository }}  
@@ -27,7 +23,7 @@ jobs:
       # 将issue的内容发送到特定的外部URL，并设置超时时间为3分钟  
       - name: Send issue content to external URL  
         id: send_request  
-        uses: peter-evans/http-request@v1.0.0  
+        uses: peter-evans/http-request
         with:  
           url: 'http://47.120.64.144:8080/github-issue' # 替换为你的实际URL  
           method: 'POST'  
@@ -38,7 +34,7 @@ jobs:
       # 如果请求成功，将外部服务的响应作为评论添加到issue上  
       - name: Comment on issue with response  
         if: steps.send_request.outputs.status_code == 200  
-        uses: peter-evans/create-or-update-comment@v1  
+        uses: peter-evans/create-or-update-comment
         with:  
           issue-number: ${{ github.event.issue.number }}  
           body: |  
@@ -52,7 +48,7 @@ jobs:
       # 如果请求失败（例如超时或网络错误），可以选择添加一个错误评论  
       - name: Comment on issue with error  
         if: steps.send_request.outputs.status_code != 200  
-        uses: peter-evans/create-or-update-comment@v1  
+        uses: peter-evans/create-or-update-comment
         with:  
           issue-number: ${{ github.event.issue.number }}  
           body: |  
