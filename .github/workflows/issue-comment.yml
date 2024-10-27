@@ -9,17 +9,6 @@ jobs:
   send-issue-content:  
     runs-on: ubuntu-latest  
     steps:
-      # 获取新创建的issue的详细信息  
-      - name: Get issue details  
-        id: issue  
-        uses: octokit/request-action@main
-        with:  
-          route: GET /repos/:repository/issues/:issue_number
-          repository: ${{ github.repository }}  
-          issue_id: 1 # ${{ github.event.number }}
-        env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-  
       # 将issue的内容发送到特定的外部URL，并设置超时时间为3分钟  
       - name: Send issue content to external URL  
         id: send_request  
@@ -38,7 +27,7 @@ jobs:
         with:  
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}  
-          number: 1 # ${{ github.event.number }}
+          number: ${{ github.event.issue.number }}
           message: |  
             Response from external service:  
             ```  
