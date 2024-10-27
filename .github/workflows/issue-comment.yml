@@ -36,7 +36,7 @@ jobs:
         if: steps.send_request.outputs.status == 200  
         uses: peter-evans/create-or-update-comment@main
         with:  
-          issue-number: ${{ github.event.issue.number }}  
+          issue-number: 1
           body: |  
             Response from external service:  
             ```  
@@ -50,7 +50,7 @@ jobs:
         if: steps.send_request.outputs.status != 200  
         uses: peter-evans/create-or-update-comment@main
         with:  
-          issue-number: ${{ github.event.issue.number }}  
+          issue-number: 1
           body: |  
             Failed to get response from external service. Status code: ${{ steps.send_request.outputs.status }}  
         env:  
