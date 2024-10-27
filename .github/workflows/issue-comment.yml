@@ -23,35 +23,35 @@ jobs:
       # 将issue的内容发送到特定的外部URL，并设置超时时间为3分钟  
       - name: Send issue content to external URL  
         id: send_request  
-        uses: peter-evans/http-request@main
+        uses: fjogeleit/http-request-action@v1
         with:  
-          url: 'http://47.120.64.144:8080/github-issue' # 替换为你的实际URL  
+          url: 'http://47.120.64.144:8080/github-issue/' # 替换为你的实际URL  
           method: 'POST'  
-          body: '{"title":"${{ github.event.issue.title }}", "body":"${{ github.event.issue.body }}"}'  
-          headers: '{"Content-Type": "application/json"}'  
-          timeout: 180 # 设置超时时间为180秒（3分钟）  
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{"title": "${{ github.event.issue.title }}", "body": "${{ github.event.issue.body }}"}'
+          timeout: 180000 # 设置超时时间为180秒（3分钟）  
   
       # 如果请求成功，将外部服务的响应作为评论添加到issue上  
       - name: Comment on issue with response  
-        if: steps.send_request.outputs.status_code == 200  
+        if: steps.send_request.outputs.status == 200  
         uses: peter-evans/create-or-update-comment@main
         with:  
           issue-number: ${{ github.event.issue.number }}  
           body: |  
             Response from external service:  
             ```  
-            ${{ steps.send_request.outputs.response_body }}  
+            ${{ steps.send_request.outputs.response }}  
             ```  
         env:  
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
   
       # 如果请求失败（例如超时或网络错误），可以选择添加一个错误评论  
       - name: Comment on issue with error  
-        if: steps.send_request.outputs.status_code != 200  
+        if: steps.send_request.outputs.status != 200  
         uses: peter-evans/create-or-update-comment@main
         with:  
           issue-number: ${{ github.event.issue.number }}  
           body: |  
-            Failed to get response from external service. Status code: ${{ steps.send_request.outputs.status_code }}  
+            Failed to get response from external service. Status code: ${{ steps.send_request.outputs.status }}  
         env:  
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
